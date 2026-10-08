@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мониторинг атмосферных засух | Юго-Восточный Казахстан (2010–2025 гг.)</title>
+  
+  <!-- Библиотеки стилей -->
+  <link rel="stylesheet" href="vendor/leaflet.css">
+  <link rel="stylesheet" href="vendor/katex.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="dark-theme">
+
+  <!-- ШАПКА ПОРТАЛА -->
+  <header class="site-header">
+    <div class="brand-wrapper">
+      <div class="brand-emblem">KZ</div>
+      <div class="brand-titles">
+        <h1>Мониторинг атмосферных засух Юго-Восточного Казахстана</h1>
+        <div class="brand-subtitle">
+          <span>Геоинформационная аналитическая система</span>
+          <span class="badge-tag">Конкурс «Дарын»</span>
+          <span class="badge-tag">2010–2025 гг.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Навигация -->
+    <nav class="main-nav">
+      <a href="#section-map" class="nav-link active">Геокарта (2D / 3D)</a>
+      <a href="#section-analytics" class="nav-link">Аналитика и ряды</a>
+      <a href="#section-calculator" class="nav-link">Модель Педя</a>
+      <a href="#section-agro" class="nav-link">Агротехнологии</a>
+      <a href="#section-database" class="nav-link">Архив данных</a>
+      <a href="#section-about" class="nav-link">Методология</a>
+    </nav>
+
+    <!-- Действия -->
+    <div class="header-actions">
+      <button class="icon-btn" id="export-csv-btn" title="Экспорт массива данных в формате CSV">
+        <span>CSV</span>
+      </button>
+      <button class="icon-btn" id="export-json-btn" title="Экспорт структуры данных в формате JSON">
+        <span>JSON</span>
+      </button>
+      <button class="icon-btn" id="theme-toggle-btn" title="Сменить цветовую тему">
+        <span id="theme-icon">Светлая тема</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ОСНОВНОЙ КОНТЕНТ -->
+  <main class="main-wrapper">
+
+    <!-- НАУЧНЫЙ ПАСПОРТ ПРОЕКТА -->
+    <section class="hero-scientific-banner">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h2>Особенности формирования атмосферных засух на территории юго-восточного Казахстана</h2>
+          <div class="hero-meta-author">
+            <div class="hero-meta-item">
+              <span><strong>Автор исследования:</strong> ученик 11 «Г» класса Нұрғазы Әмір</span>
+            </div>
+            <div class="hero-meta-item">
+              <span><strong>Научная программа:</strong> Республиканский конкурс «Дарын»</span>
+            </div>
+            <div class="hero-meta-item">
+              <span><strong>Наблюдательная сеть:</strong> 5 опорных метеостанций (Талдыкорган, Жаланашколь, Матай, Алматы, Кеген)</span>
+            </div>
+            <div class="hero-meta-item">
+              <span><strong>Математический аппарат:</strong> Индекс атмосферной засухи А.А. Педя (Si)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Текущее состояние региона -->
+        <div class="regional-status-pill">
+          <div class="status-left">
+            <span class="status-label">Региональный индекс Si:</span>
+            <span class="status-val" id="region-status-val">+0.48</span>
+          </div>
+          <div class="status-right">
+            <span class="status-badge-chip" id="region-status-badge">Слабая засуха</span>
+            <span class="status-desc-text" id="region-status-desc">Средневзвешенное значение по опорным пунктам</span>
+            <span style="font-size: 0.7rem; color: var(--text-muted); font-family: monospace;" id="region-status-month">Июль 2020 г.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- СВОДНЫЕ НАУЧНЫЕ ПОКАЗАТЕЛИ -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-title">Опорная сеть</span>
+          <span style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">[ST-05]</span>
+        </div>
+        <div class="kpi-number" style="color: var(--accent-blue);">5 станций</div>
+        <div class="kpi-footnote">Высотный градиент от 372 м до 1802 м над у.м.</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-title">Временной охват</span>
+          <span style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">[T-16Y]</span>
+        </div>
+        <div class="kpi-number" style="color: var(--accent-emerald);">16 лет</div>
+        <div class="kpi-footnote">2010–2025 гг. (теплое полугодие: апр – авг)</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-title">Пиковый экстремум (S_max)</span>
+          <span style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">[MAX]</span>
+        </div>
+        <div class="kpi-number" style="color: var(--accent-red);">+2.3</div>
+        <div class="kpi-footnote">Зафиксирован на станциях Матай и Кеген</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-title">Опасные засухи (Si > 1)</span>
+          <span style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">[WARN]</span>
+        </div>
+        <div class="kpi-number" style="color: var(--accent-orange);">8 случаев</div>
+        <div class="kpi-footnote">Критический порог ущерба продуктивности посевов</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-title">Резерв влагонакопления</span>
+          <span style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">[H2O]</span>
+        </div>
+        <div class="kpi-number" style="color: var(--accent-cyan);">+85 мм</div>
+        <div class="kpi-footnote">Эффект сбережения влаги чистыми парами</div>
+      </div>
+    </div>
+
+    <!-- РАЗДЕЛ 1: КАРТОГРАФИЧЕСКИЙ МОДУЛЬ (2D / 3D) -->
+    <section id="section-map" class="portal-section active">
+      <div class="map-section-wrapper">
+        <!-- Управление режимами -->
+        <div class="map-control-header">
+          <!-- Переключатель 2D / 3D -->
+          <div class="map-mode-toggle">
+            <button class="mode-btn active" id="btn-mode-2d">
+              <span>2D ГИС-карта (Интерполяция / Спутник)</span>
+            </button>
+            <button class="mode-btn" id="btn-mode-3d">
+              <span>3D Цифровая модель рельефа (DEM)</span>
+            </button>
+          </div>
+
+          <!-- Ракурсы -->
+          <div class="map-presets">
+            <span style="font-size:0.75rem; color:var(--text-secondary); align-self:center;">Фокус:</span>
+            <button class="map-preset-btn active" data-preset="all">Все станции</button>
+            <button class="map-preset-btn" data-preset="almaty">Алматы (Заилийский Алатау)</button>
+            <button class="map-preset-btn" data-preset="kegen">Кеген (Плато 1802м)</button>
+            <button class="map-preset-btn" data-preset="zhalanashkol">Жаланашколь (Джунгарские ворота)</button>
+            <button class="map-preset-btn" data-preset="matay">Матай (Прибалхашье)</button>
+            <button class="map-preset-btn" data-preset="taldykorgan">Талдыкорган (Каратал)</button>
+          </div>
+        </div>
+
+        <!-- Вьюпорт -->
+        <div class="map-viewport-container">
+          <!-- 2D Leaflet -->
+          <div id="map2d-view">
+            <div id="map2d-container"></div>
+          </div>
+
+          <!-- 3D Three.js -->
+          <div id="map3d-view" style="display: none;">
+            <div id="map3d-container"></div>
+            <div class="map-3d-hint">
+              <span>Управление 3D камерой: ЛКМ — вращение, ПКМ — смещение, колесо мыши — масштаб</span>
+            </div>
+          </div>
+
+          <!-- Легенда шкалы Педя -->
+          <div class="map-legend-dock">
+            <div class="legend-title">Градация засух (индекс Si)</div>
+            <div class="legend-item">
+              <span class="legend-color-box" style="background: var(--si-wet);"></span>
+              <span>Si &le; 0: Избыточное увлажнение / норма</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color-box" style="background: var(--si-weak);"></span>
+              <span>0 &lt; Si &lt; 1: Слабая засуха</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color-box" style="background: var(--si-danger);"></span>
+              <span>1 &le; Si &lt; 2: Опасная атмосферная засуха</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color-box" style="background: var(--si-extreme);"></span>
+              <span>Si &ge; 2: Сильная экстремальная засуха</span>
+            </div>
+          </div>
+
+          <!-- Временная шкала (Timeline) -->
+          <div class="floating-timeline-bar">
+            <!-- Воспроизведение -->
+            <div class="timeline-play-control">
+              <button class="btn-play-timeline" id="timeline-play-btn">
+                <span>Воспроизведение</span>
+              </button>
+            </div>
+
+            <!-- Слайдер года -->
+            <div class="timeline-slider-wrapper">
+              <div class="slider-labels-row">
+                <span class="slider-title">Год наблюдений:</span>
+                <span class="slider-val-highlight" id="timeline-year-val">2020</span>
+              </div>
+              <input type="range" id="timeline-year-slider" class="custom-range-slider" min="2010" max="2025" step="1" value="2020">
+            </div>
+
+            <!-- Месяцы -->
+            <div class="months-selector-group">
+              <button class="month-pill-btn" data-month="apr">Апр</button>
+              <button class="month-pill-btn" data-month="may">Май</button>
+              <button class="month-pill-btn" data-month="jun">Июн</button>
+              <button class="month-pill-btn active" data-month="jul">Июл</button>
+              <button class="month-pill-btn" data-month="aug">Авг</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- СЕТКА КАРТОЧЕК СТАНЦИЙ -->
+      <h3 style="margin-bottom: 1rem; font-size: 1.15rem; font-weight: 700;">Опорные пункты наблюдений метеорологической сети</h3>
+      <div class="station-cards-grid" id="station-cards-grid">
+        <!-- Формируется из data.js -->
+      </div>
+    </section>
+
+    <!-- РАЗДЕЛ 2: АНАЛИТИКА И ВРЕМЕННЫЕ РЯДЫ -->
+    <section id="section-analytics" class="portal-section">
+      <h3 style="margin-bottom: 1rem; font-size: 1.25rem; font-weight: 700;">Математический анализ и графики динамики засух</h3>
+      
+      <div class="analytics-grid">
+        <!-- 1. Динамика индекса Педя (2010-2025) -->
+        <div class="chart-card full-width">
+          <div class="chart-card-header">
+            <div>
+              <h4 class="chart-card-title">Многолетняя динамика параметра атмосферной засухи (Si) за 2010–2025 гг.</h4>
+              <p style="font-size: 0.75rem; color: var(--text-secondary);">Пороговые уровни: Si = 1 (опасная засуха), Si = 2 (сильная экстремальная засуха)</p>
+            </div>
+            <div class="chart-filters">
+              <select id="chart-station-filter" class="select-input">
+                <option value="all">Все 5 станций</option>
+                <option value="taldykorgan">ст. Талдыкорган</option>
+                <option value="zhalanashkol">ст. Жаланашколь</option>
+                <option value="matay">ст. Матай</option>
+                <option value="almaty">ст. Алматы (ОГМС)</option>
+                <option value="kegen">ст. Кеген</option>
+              </select>
+              <select id="chart-month-filter" class="select-input">
+                <option value="jul" selected>Июль (середина вегетации)</option>
+                <option value="apr">Апрель (ранняя весна)</option>
+                <option value="may">Май</option>
+                <option value="jun">Июнь</option>
+                <option value="aug">Август (конец лета)</option>
+                <option value="avg">Среднее за теплое полугодие</option>
+              </select>
+            </div>
+          </div>
+          <div class="chart-canvas-wrapper tall">
+            <canvas id="chart-timeseries"></canvas>
+          </div>
+        </div>
+
+        <!-- 2. Тепловая матрица интенсивности -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <h4 class="chart-card-title">Спектральная матрица засушливости (Год × Месяц)</h4>
+            <span style="font-size: 0.75rem; color: var(--text-secondary); font-family: monospace;">[HEATMAP]</span>
+          </div>
+          <div id="heatmap-matrix-container">
+            <!-- Формируется из charts.js -->
+          </div>
+        </div>
+
+        <!-- 3. Климатические нормы температуры -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <h4 class="chart-card-title">Климатические нормы температуры воздуха (Таблица 1)</h4>
+            <span style="font-size: 0.75rem; color: var(--text-secondary);">Теплое полугодие</span>
+          </div>
+          <div class="chart-canvas-wrapper">
+            <canvas id="chart-norms"></canvas>
+          </div>
+        </div>
+
+        <!-- 4. Число случаев засух -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <h4 class="chart-card-title">Число случаев атмосферных засух различной интенсивности (Таблица 5)</h4>
+            <span style="font-size: 0.75rem; color: var(--text-secondary);">Весенние и летние</span>
+          </div>
+          <div class="chart-canvas-wrapper">
+            <canvas id="chart-cases"></canvas>
+          </div>
+        </div>
+
+        <!-- 5. Экстремумы S_max -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <h4 class="chart-card-title">Экстремальные значения засухи S_max (Таблица 4)</h4>
+            <span style="font-size: 0.75rem; color: var(--text-secondary);">Радарная диаграмма</span>
+          </div>
+          <div class="chart-canvas-wrapper">
+            <canvas id="chart-radar"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- РАЗДЕЛ 3: МОДЕЛЬ ПЕДЯ И КАЛЬКУЛЯТОР -->
+    <section id="section-calculator" class="portal-section">
+      <h3 style="margin-bottom: 1rem; font-size: 1.25rem; font-weight: 700;">Математическая модель индекса Педя и расчетный модуль</h3>
+
+      <!-- Формула -->
+      <div class="hero-scientific-banner" style="margin-bottom: 1.5rem; padding: 1.5rem;">
+        <h4 style="margin-bottom: 0.5rem; color: var(--accent-blue); font-size: 1.05rem;">Формула параметра атмосферной засухи А.А. Педя</h4>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+          Параметр атмосферной засухи Si выражает баланс между нормированной температурной аномалией и нормированной аномалией атмосферных осадков:
+        </p>
+        <div class="formula-rendered-box" id="ped-main-formula">
+          <!-- KaTeX формула -->
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.75rem;">
+          Где Ti, Ri — средняя месячная температура воздуха и сумма осадков; T̄, R̄ — многолетние климатические нормы; σT, σR — среднеквадратические отклонения температуры и осадков за исследуемый период.
+        </p>
+      </div>
+
+      <!-- Калькулятор -->
+      <div class="calculator-card">
+        <div class="calc-grid">
+          <!-- Параметры ввода -->
+          <div class="calc-inputs-section">
+            <h4 style="font-size: 1.05rem; margin-bottom: 0.25rem;">Входные метеорологические параметры</h4>
+            
+            <div class="input-row">
+              <div class="form-group">
+                <label class="form-label">Опорная метеостанция:</label>
+                <select id="calc-station-select" class="select-input" style="width: 100%;"></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Месяц вегетационного периода:</label>
+                <select id="calc-month-select" class="select-input" style="width: 100%;"></select>
+              </div>
+            </div>
+
+            <div class="input-row">
+              <div class="form-group">
+                <label class="form-label">Фактическая температура T (°C):</label>
+                <input type="number" id="calc-temp" class="text-input" step="0.1" value="25.8">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Фактические осадки R (мм):</label>
+                <input type="number" id="calc-rain" class="text-input" step="0.1" value="4.2">
+              </div>
+            </div>
+
+            <hr style="border: none; border-top: 1px solid var(--border-color); margin: 0.5rem 0;">
+
+            <label class="checkbox-label">
+              <input type="checkbox" id="calc-custom-toggle">
+              <span>Ручной ввод климатических норм и СКО</span>
+            </label>
+
+            <div class="input-row">
+              <div class="form-group">
+                <label class="form-label">Климатическая норма T̄ (°C):</label>
+                <input type="number" id="calc-temp-norm" class="text-input" step="0.1" disabled>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Климатическая норма R̄ (мм):</label>
+                <input type="number" id="calc-rain-norm" class="text-input" step="0.1" disabled>
+              </div>
+            </div>
+
+            <div class="input-row">
+              <div class="form-group">
+                <label class="form-label">СКО температуры σ_T:</label>
+                <input type="number" id="calc-sigma-t" class="text-input" step="0.1" disabled>
+              </div>
+              <div class="form-group">
+                <label class="form-label">СКО осадков σ_R:</label>
+                <input type="number" id="calc-sigma-r" class="text-input" step="0.1" disabled>
+              </div>
+            </div>
+          </div>
+
+          <!-- Результат вычисления -->
+          <div class="calc-results-section">
+            <h4 style="font-size: 1.05rem; margin-bottom: 0.25rem;">Результат расчета индекса Педя</h4>
+
+            <div class="calc-score-box">
+              <div>
+                <span style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase;">Расчетный индекс Si:</span>
+                <div class="score-main" id="calc-result-val">+1.85</div>
+              </div>
+              <span class="status-badge-chip" id="calc-result-badge" style="font-size: 0.85rem; padding: 6px 14px;">Опасная засуха</span>
+            </div>
+
+            <!-- Шкала-индикатор -->
+            <div class="gauge-bar-wrapper">
+              <div class="gauge-needle" id="calc-gauge-needle"></div>
+            </div>
+            <div class="gauge-labels">
+              <span>-3 (Влажно)</span>
+              <span>0 (Норма)</span>
+              <span>+1 (Слабая)</span>
+              <span>+2 (Опасная)</span>
+              <span>+3 (Экстремальная)</span>
+            </div>
+
+            <!-- Шаги разложения -->
+            <div class="calc-steps-grid">
+              <div class="calc-step-card">
+                <span class="calc-step-title">Аномалия темп. (ΔT):</span>
+                <div class="calc-step-val" id="calc-delta-t">+2.50 °C</div>
+              </div>
+              <div class="calc-step-card">
+                <span class="calc-step-title">Дефицит осадков (ΔR):</span>
+                <div class="calc-step-val" id="calc-delta-r">-8.40 мм</div>
+              </div>
+              <div class="calc-step-card">
+                <span class="calc-step-title">Нормированная темп. (ΔT / σT):</span>
+                <div class="calc-step-val" id="calc-term-t">+1.67</div>
+              </div>
+              <div class="calc-step-card">
+                <span class="calc-step-title">Нормированные осадки (ΔR / σR):</span>
+                <div class="calc-step-val" id="calc-term-r">-0.21</div>
+              </div>
+            </div>
+
+            <!-- KaTeX расчет -->
+            <div class="formula-rendered-box" id="calc-formula-step" style="font-size: 0.85rem;"></div>
+
+            <!-- Научное заключение -->
+            <div class="calc-verdict-box" id="calc-result-verdict">
+              <strong>Научный вывод:</strong> Вычисляется...
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- РАЗДЕЛ 4: АГРОТЕХНИЧЕСКИЙ КОМПЛЕКС -->
+    <section id="section-agro" class="portal-section">
+      <h3 style="margin-bottom: 1rem; font-size: 1.25rem; font-weight: 700;">Комплекс агротехнических и природоохранных мероприятий влагосбережения</h3>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+        В аридных и засушливых условиях Юго-Восточного Казахстана почвенная влага является решающим фактором продуктивности сельскохозяйственных культур. Система мероприятий направлена на аккумуляцию, сохранение и рациональное использование продуктивной влаги.
+      </p>
+
+      <div class="agro-simulator-wrapper">
+        <!-- Список мероприятий -->
+        <div class="agro-measures-list" id="agro-measures-list"></div>
+
+        <!-- Симулятор суммарного эффекта -->
+        <div class="agro-results-panel">
+          <h4 style="font-size: 1.1rem; font-weight: 700;">Симулятор накопления почвенной влаги</h4>
+          <p style="font-size: 0.8rem; color: var(--text-secondary);">
+            Выберите комплекс запланированных агротехнических приемов для оценки совокупного эффекта влагосбережения:
+          </p>
+
+          <div class="agro-kpi-block">
+            <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Совокупный прирост почвенной влаги:</span>
+            <div class="agro-kpi-num" id="sim-total-moisture">+141.5 мм</div>
+            <div class="agro-kpi-sub">В метровом корнеобитаемом горизонте почвы</div>
+          </div>
+
+          <div class="calc-steps-grid">
+            <div class="calc-step-card">
+              <span class="calc-step-title">Снижение транспирации:</span>
+              <div class="calc-step-val text-emerald" id="sim-transp-reduction">-17.5%</div>
+            </div>
+            <div class="calc-step-card">
+              <span class="calc-step-title">Сбережение испарения зяби:</span>
+              <div class="calc-step-val" id="sim-evap-reduction">15–20 мм</div>
+            </div>
+          </div>
+
+          <div class="calc-verdict-box" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.3);" id="sim-drought-mitigation">
+            Снижение риска засухи Si на ~4.0 пункта
+          </div>
+
+          <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">
+            <strong>Агрономическое обоснование:</strong> Соблюдение календарных сроков полевых работ критично: запоздание с весенней обработкой зяби на 3–4 дня влечет потерю от 8 до 10 мм продуктивной влаги.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- РАЗДЕЛ 5: АРХИВ ДАННЫХ (ТАБЛИЦЫ 1–7) -->
+    <section id="section-database" class="portal-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h3 style="font-size: 1.25rem; font-weight: 700;">Архив исходных данных исследования (Таблицы 1–7)</h3>
+          <p style="font-size: 0.8rem; color: var(--text-secondary);">Полный массив климатических норм, рядов индексов засух и экстремумов</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="icon-btn" onclick="window.app.exportDatabaseToCSV()">Экспорт всей базы данных (CSV)</button>
+        </div>
+      </div>
+
+      <!-- Таблица 1: Нормы -->
+      <div class="table-card">
+        <h4 style="font-size: 0.95rem; margin-bottom: 0.75rem;">Таблица 1 – Нормы средней месячной температуры воздуха и количества осадков</h4>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Метеорологическая станция</th>
+                <th>Климатический показатель</th>
+                <th>Апрель</th>
+                <th>Май</th>
+                <th>Июнь</th>
+                <th>Июль</th>
+                <th>Август</th>
+              </tr>
+            </thead>
+            <tbody id="table1-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Таблица 4: Экстремумы S_max -->
+      <div class="table-card">
+        <h4 style="font-size: 0.95rem; margin-bottom: 0.75rem;">Таблица 4 – Экстремальные значения параметра Si при засухах (S_max)</h4>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Метеорологическая станция</th>
+                <th>Апрель</th>
+                <th>Май</th>
+                <th>Июнь</th>
+                <th>Июль</th>
+                <th>Август</th>
+              </tr>
+            </thead>
+            <tbody id="table4-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Таблица 5: Число случаев засух -->
+      <div class="table-card">
+        <h4 style="font-size: 0.95rem; margin-bottom: 0.75rem;">Таблица 5 – Число случаев с атмосферными засухами различной интенсивности</h4>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Станция</th>
+                <th>Весенние слабые</th>
+                <th>Весенние средние</th>
+                <th>Весенние сильные</th>
+                <th>Летние слабые</th>
+                <th>Летние средние</th>
+                <th>Летние сильные</th>
+              </tr>
+            </thead>
+            <tbody id="table5-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Таблицы 6 и 7: Повторяемость засух -->
+      <div class="table-card">
+        <h4 style="font-size: 0.95rem; margin-bottom: 0.75rem;">Таблицы 6 & 7 – Повторяемость атмосферных засух по годам и месяцам теплого периода</h4>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Месяц</th>
+                <th>Годы с засухой (Si > 0)</th>
+                <th>Годы с опасной засухой (Si > 1)</th>
+              </tr>
+            </thead>
+            <tbody id="table67-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- РАЗДЕЛ 6: МЕТОДОЛОГИЯ И О ПРОЕКТЕ -->
+    <section id="section-about" class="portal-section">
+      <h3 style="margin-bottom: 1rem; font-size: 1.25rem; font-weight: 700;">Методологические основы и научные результаты</h3>
+
+      <div class="hero-scientific-banner" style="margin-bottom: 1.5rem;">
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+          <div>
+            <h4 style="color: var(--accent-blue); font-size: 1.1rem; margin-bottom: 0.75rem;">Цель и задачи исследования</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.6;">
+              <strong>Цель работы:</strong> изучение закономерностей формирования физико-географических условий атмосферных засух в Юго-Восточном Казахстане на основе 16-летнего ряда наблюдений (2010–2025 гг.).
+            </p>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;"><strong>Задачи проекта:</strong></p>
+            <ul style="font-size: 0.85rem; color: var(--text-secondary); padding-left: 1.25rem; line-height: 1.6;">
+              <li>Изучить физико-географические условия исследуемой территории по фондовым и климатическим справочникам;</li>
+              <li>Выявить пространственное распределение зон, подверженных атмосферным засухам с помощью формулы А.А. Педя;</li>
+              <li>Определить экстремальные значения S_max и повторяемость засушливых периодов по сезонам года;</li>
+              <li>Разработать научно обоснованный комплекс агротехнических мероприятий по минимизации дефицита влаги.</li>
+            </ul>
+          </div>
+          <div style="background: rgba(0,0,0,0.25); border-radius: var(--radius-md); padding: 1.25rem; border: 1px solid var(--border-color);">
+            <h5 style="font-size: 0.95rem; margin-bottom: 0.75rem;">Паспорт проекта</h5>
+            <p style="font-size: 0.85rem; margin-bottom: 0.5rem;"><strong>Автор:</strong> Нұрғазы Әмір</p>
+            <p style="font-size: 0.85rem; margin-bottom: 0.5rem;"><strong>Класс:</strong> 11 «Г» класс</p>
+            <p style="font-size: 0.85rem; margin-bottom: 0.5rem;"><strong>Конкурс:</strong> Республиканские соревнования научных проектов «Дарын»</p>
+            <p style="font-size: 0.85rem; margin-bottom: 0.5rem;"><strong>Регион:</strong> Юго-Восточный Казахстан (Семиречье / Жетісу / Тянь-Шань)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Иллюстрации из исследования -->
+      <div class="analytics-grid">
+        <div class="chart-card">
+          <h4 class="chart-card-title" style="margin-bottom: 0.75rem;">Физико-географическая карта полигона исследования</h4>
+          <img src="assets/image1.png" alt="Карта Юго-Восточного Казахстана" style="width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Первоисточник (слайд №5): Орографическая схема региона и размещение станций</p>
+        </div>
+
+        <div class="chart-card">
+          <h4 class="chart-card-title" style="margin-bottom: 0.75rem;">Проявление атмосферной засухи в агроландшафтах</h4>
+          <img src="assets/image2.png" alt="Засуха в регионе" style="width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Первоисточник (слайд №7): Иссушение пахотного слоя и деградация растительного покрова</p>
+        </div>
+      </div>
+
+      <!-- Основные выводы -->
+      <div class="hero-scientific-banner" style="margin-top: 1.5rem;">
+        <h4 style="color: var(--accent-emerald); font-size: 1.1rem; margin-bottom: 0.75rem;">Основные научные выводы</h4>
+        <ol style="font-size: 0.85rem; color: var(--text-secondary); padding-left: 1.25rem; line-height: 1.6;">
+          <li>На территории Юго-Восточного Казахстана в период 2010–2025 гг. атмосферные засухи фиксировались на всех пяти рассматриваемых метеорологических станциях.</li>
+          <li>Максимальная интенсивность засух наблюдается в полупустынном Прибалхашье (станция Матай, S_max = 2.3) и в замкнутой высокогорной котловине (станция Кеген, S_max = 2.3).</li>
+          <li>Повторяемость опасных атмосферных засух (Si > 1) достигает пика в июне и августе, представляя непосредственную угрозу на стадиях цветения и созревания зерновых культур.</li>
+          <li>Применение рекомендованного комплекса агротехнологий (чистые пары, сохранение стерни, осеннее выравнивание зяби) аккумулирует до 85–140 мм дополнительной влаги в корнеобитаемом слое почвы.</li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ПОДВАЛ -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div>
+        <p class="footer-author">Научный проект: «Особенности формирования атмосферных засух на территории юго-восточного Казахстана»</p>
+        <p style="font-size: 0.75rem; color: var(--text-muted);">Автор: ученик 11 «Г» класса Нұрғазы Әмір • Республиканский конкурс научных проектов «Дарын»</p>
+      </div>
+      <div>
+        <span class="badge-tag">Leaflet 2D GIS</span>
+        <span class="badge-tag">Three.js 3D DEM</span>
+        <span class="badge-tag">Chart.js Analytics</span>
+        <span class="badge-tag">KaTeX Notation</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Скрипты -->
+  <script src="vendor/leaflet.js"></script>
+  <script src="vendor/three.min.js"></script>
+  <script src="vendor/OrbitControls.js"></script>
+  <script src="vendor/chart.umd.min.js"></script>
+  <script src="vendor/katex.min.js"></script>
+
+  <!-- Модули портала -->
+  <script src="js/data.js"></script>
+  <script src="js/map2d.js"></script>
+  <script src="js/map3d.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
