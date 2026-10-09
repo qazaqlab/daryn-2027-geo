@@ -53,7 +53,12 @@ class DroughtMap2D {
       zoomControl: true
     });
 
-    // Контрол слоев
+    // Векторные ГИС-слои (районы и реки)
+    this.districtsLayer = L.layerGroup();
+    this.riversLayer = L.layerGroup();
+    this.buildVectorLayers();
+
+    // Контрол базовых и оверлейных слоев
     const baseMaps = {
       "Спутник (Esri World Imagery)": satelliteLayer,
       "Топография и Рельеф (OpenTopoMap)": topoLayer,
@@ -61,7 +66,15 @@ class DroughtMap2D {
       "Схема (OpenStreetMap)": osmLayer
     };
 
-    L.control.layers(baseMaps, null, { position: 'topright' }).addTo(this.map);
+    const overlayMaps = {
+      "Сельскохозяйственные районы": this.districtsLayer,
+      "Гидросеть и реки региона": this.riversLayer
+    };
+
+    this.districtsLayer.addTo(this.map);
+    this.riversLayer.addTo(this.map);
+
+    L.control.layers(baseMaps, overlayMaps, { position: 'topright' }).addTo(this.map);
     L.control.scale({ metric: true, imperial: false, position: 'bottomleft' }).addTo(this.map);
 
     // Добавляем IDW холст для интерполяции поля засухи
@@ -74,6 +87,88 @@ class DroughtMap2D {
     setTimeout(() => {
       this.map.invalidateSize();
     }, 200);
+  }
+
+  buildVectorLayers() {
+    // 1. Сельскохозяйственные районы Семиречья (полигоны)
+    const districts = [
+      {
+        name: 'Аксуский район',
+        nameKz: 'Ақсу ауданы',
+        spec: 'Богарное и орошаемое зерноводство, сахарная свекла, пастбища (ст. Матай)',
+        coords: [[45.4, 78.0], [46.3, 78.3], [46.1, 79.8], [45.2, 79.4], [45.4, 78.0]]
+      },
+      {
+        name: 'Каратальский / Талдыкорганский район',
+        nameKz: 'Қаратал / Талдықорған өңірі',
+        spec: 'Орошаемое земледелие (соя, пшеница, рис, овощеводство)',
+        coords: [[44.7, 77.8], [45.3, 77.9], [45.2, 79.1], [44.6, 78.9], [44.7, 77.8]]
+      },
+      {
+        name: 'Алакольский район',
+        nameKz: 'Алакөл ауданы',
+        spec: 'Зерновые культуры, кормопроизводство, озёрный бассейн (ст. Жаланашколь)',
+        coords: [[45.2, 80.8], [46.2, 81.2], [45.8, 82.6], [45.1, 82.2], [45.2, 80.8]]
+      },
+      {
+        name: 'Илийский / Талгарский / Карасайский районы',
+        nameKz: 'Іле / Талғар / Қарасай аудандары',
+        spec: 'Интенсивное земледелие, плодоводство, кукуруза, соя (ст. Алматы)',
+        coords: [[43.0, 76.4], [43.8, 76.5], [43.7, 77.6], [43.0, 77.5], [43.0, 76.4]]
+      },
+      {
+        name: 'Кегенский район',
+        nameKz: 'Кеген ауданы',
+        spec: 'Высокогорное богарное земледелие, ячмень, кормовые травы, отгонное овцеводство (ст. Кеген)',
+        coords: [[42.7, 78.6], [43.4, 78.8], [43.3, 79.9], [42.6, 79.7], [42.7, 78.6]]
+      }
+    ];
+
+    districts.forEach(d => {
+      const poly = L.polygon(d.coords, {
+        color: '#38bdf8',
+        weight: 1.5,
+        dashArray: '4, 4',
+        fillColor: '#38bdf8',
+        fillOpacity: 0.08
+      });
+      poly.bindTooltip(`<strong>${d.name} (${d.nameKz})</strong><br><span style="font-size:11px;">Специализация: ${d.spec}</span>`, { sticky: true });
+      this.districtsLayer.addLayer(poly);
+    });
+
+    // 2. Гидросеть: главные реки региона
+    const rivers = [
+      {
+        name: 'река Или (Іле өзені)',
+        coords: [[43.7, 80.2], [43.9, 79.1], [43.8, 77.5], [44.3, 76.8], [44.9, 75.8], [45.3, 74.5]]
+      },
+      {
+        name: 'река Каратал (Қаратал өзені)',
+        coords: [[44.8, 78.9], [45.0, 78.4], [45.3, 78.0], [45.7, 77.6], [46.3, 77.0]]
+      },
+      {
+        name: 'река Аксу (Ақсу өзені)',
+        coords: [[45.0, 79.5], [45.4, 79.0], [45.9, 78.5], [46.3, 78.0]]
+      },
+      {
+        name: 'река Лепсы (Лепсі өзені)',
+        coords: [[45.2, 80.3], [45.6, 79.8], [46.1, 79.3], [46.5, 78.7]]
+      },
+      {
+        name: 'река Чарын (Шарын өзені)',
+        coords: [[42.9, 79.3], [43.2, 79.1], [43.6, 79.3], [43.9, 79.4]]
+      }
+    ];
+
+    rivers.forEach(r => {
+      const line = L.polyline(r.coords, {
+        color: '#06b6d4',
+        weight: 2.5,
+        opacity: 0.85
+      });
+      line.bindTooltip(`<strong>${r.name}</strong>`, { sticky: true });
+      this.riversLayer.addLayer(line);
+    });
   }
 
   // Создание canvas-слоя для пространственной интерполяции поля засухи (IDW)

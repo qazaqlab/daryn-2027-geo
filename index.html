@@ -17,10 +17,10 @@
     <div class="brand-wrapper">
       <div class="brand-emblem">KZ</div>
       <div class="brand-titles">
-        <h1>Мониторинг атмосферных засух Юго-Восточного Казахстана</h1>
+        <h1 data-i18n="siteTitle">Мониторинг атмосферных засух Юго-Восточного Казахстана</h1>
         <div class="brand-subtitle">
-          <span>Геоинформационная аналитическая система</span>
-          <span class="badge-tag">Конкурс «Дарын»</span>
+          <span data-i18n="siteSubtitle">Геоинформационная аналитическая система</span>
+          <span class="badge-tag" data-i18n="contestBadge">Конкурс «Дарын»</span>
           <span class="badge-tag">2010–2025 гг.</span>
         </div>
       </div>
@@ -28,16 +28,28 @@
 
     <!-- Навигация -->
     <nav class="main-nav">
-      <a href="#section-map" class="nav-link active">Геокарта (2D / 3D)</a>
-      <a href="#section-analytics" class="nav-link">Аналитика и ряды</a>
-      <a href="#section-calculator" class="nav-link">Модель Педя</a>
-      <a href="#section-agro" class="nav-link">Агротехнологии</a>
-      <a href="#section-database" class="nav-link">Архив данных</a>
-      <a href="#section-about" class="nav-link">Методология</a>
+      <a href="#section-map" class="nav-link active" data-i18n="navMap">Геокарта (2D / 3D)</a>
+      <a href="#section-transect" class="nav-link" data-i18n="navTransect">Высотный профиль</a>
+      <a href="#section-analytics" class="nav-link" data-i18n="navAnalytics">Аналитика и ряды</a>
+      <a href="#section-calculator" class="nav-link" data-i18n="navCalculator">Модель Педя</a>
+      <a href="#section-economic" class="nav-link" data-i18n="navEconomic">Агро-экономика</a>
+      <a href="#section-agro" class="nav-link" data-i18n="navAgro">Влагосбережение</a>
+      <a href="#section-database" class="nav-link" data-i18n="navDatabase">Архив данных</a>
+      <a href="#section-about" class="nav-link" data-i18n="navAbout">Методология</a>
     </nav>
 
     <!-- Действия -->
     <div class="header-actions">
+      <!-- Переключатель языка -->
+      <div class="lang-switch-group">
+        <button class="lang-btn" data-lang="kz">KZ</button>
+        <button class="lang-btn active" data-lang="ru">RU</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+
+      <button class="icon-btn" id="btn-print-report" title="Печать научного паспорта (PDF)">
+        <span data-i18n="btnPrintReport">Печать отчета (PDF)</span>
+      </button>
       <button class="icon-btn" id="export-csv-btn" title="Экспорт массива данных в формате CSV">
         <span>CSV</span>
       </button>
@@ -242,6 +254,27 @@
       <h3 style="margin-bottom: 1rem; font-size: 1.15rem; font-weight: 700;">Опорные пункты наблюдений метеорологической сети</h3>
       <div class="station-cards-grid" id="station-cards-grid">
         <!-- Формируется из data.js -->
+      </div>
+    </section>
+
+    <!-- РАЗДЕЛ: ВЫСОТНЫЙ ГЕО-ПРОФИЛЬ (ОРОГРАФИЧЕСКИЙ ТРАНСЕКТ) -->
+    <section id="section-transect" class="portal-section">
+      <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem; font-weight: 700;" data-i18n="transectTitle">Высотный гео-профиль и орографический трансект региона</h3>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;" data-i18n="transectDesc">
+        Анализ влияния высотной поясности и рельефа на температуру, осадки и параметры засух по линии от пустынного Прибалхашья до высокогорий Центрального Тянь-Шаня.
+      </p>
+
+      <div class="chart-card full-width" style="margin-bottom: 1.5rem;">
+        <div class="chart-card-header">
+          <div>
+            <h4 class="chart-card-title">Орографический трансект: Прибалхашье (Матай, 391м) — Алматы (848м) — Тянь-Шань (Кеген, 1802м)</h4>
+            <p style="font-size: 0.75rem; color: var(--text-secondary);">Сравнение высоты рельефа, температурной депрессии, градиента осадков и текущего индекса Si</p>
+          </div>
+          <span style="font-size: 0.75rem; font-family: monospace; color: var(--accent-blue);">[DEM TRANSECT]</span>
+        </div>
+        <div class="chart-canvas-wrapper tall">
+          <canvas id="chart-transect"></canvas>
+        </div>
       </div>
     </section>
 
@@ -454,6 +487,105 @@
             <!-- Научное заключение -->
             <div class="calc-verdict-box" id="calc-result-verdict">
               <strong>Научный вывод:</strong> Вычисляется...
+            </div>
+          </div>
+        </div>
+    </section>
+
+    <!-- РАЗДЕЛ: ЭКОНОМИКО-АГРОНОМИЧЕСКИЙ КАЛЬКУЛЯТОР -->
+    <section id="section-economic" class="portal-section">
+      <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem; font-weight: 700;" data-i18n="econTitle">Экономико-агрономический калькулятор ущерба и урожайности</h3>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;" data-i18n="econDesc">
+        Моделирование потерь урожая сельскохозяйственных культур при атмосферной засухе (Si) и расчет предотвращенного финансового ущерба (в тенге / ₸).
+      </p>
+
+      <div class="calculator-card">
+        <div class="calc-grid">
+          <!-- Параметры ввода хозяйства -->
+          <div class="calc-inputs-section">
+            <h4 style="font-size: 1.05rem; margin-bottom: 0.25rem;">Параметры агропредприятия и культуры</h4>
+
+            <div class="input-row">
+              <div class="form-group">
+                <label class="form-label" data-i18n="cropSelectLabel">Сельскохозяйственная культура:</label>
+                <select id="econ-crop-select" class="select-input" style="width: 100%;"></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-i18n="cropAreaLabel">Площадь посева (гектар):</label>
+                <input type="number" id="econ-area-input" class="text-input" value="1000" step="50">
+              </div>
+            </div>
+
+            <div class="input-row">
+              <div class="form-group">
+                <label class="form-label" data-i18n="cropBaseYieldLabel">Базовая урожайность (ц/га):</label>
+                <input type="number" id="econ-yield-input" class="text-input" value="18" step="0.5">
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-i18n="cropPriceLabel">Рыночная цена (тенге / тонна):</label>
+                <input type="number" id="econ-price-input" class="text-input" value="85000" step="1000">
+              </div>
+            </div>
+
+            <hr style="border: none; border-top: 1px solid var(--border-color); margin: 0.5rem 0;">
+
+            <div class="input-row">
+              <div class="form-group">
+                <label class="form-label">Привязка к метеостанции:</label>
+                <select id="econ-station-select" class="select-input" style="width: 100%;">
+                  <option value="taldykorgan">ст. Талдыкорган (Жетісу)</option>
+                  <option value="matay">ст. Матай (Прибалхашье)</option>
+                  <option value="almaty">ст. Алматы (ОГМС)</option>
+                  <option value="kegen">ст. Кеген (Высокогорье)</option>
+                  <option value="zhalanashkol">ст. Жаланашколь (Джунгарские ворота)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-i18n="cropRiskMonthLabel">Критический месяц вегетации:</label>
+                <select id="econ-month-select" class="select-input" style="width: 100%;">
+                  <option value="jun">Июнь (Кущение / Цветение)</option>
+                  <option value="jul" selected>Июль (Налив зерна)</option>
+                  <option value="aug">Август (Созревание)</option>
+                  <option value="may">Май (Всходы)</option>
+                  <option value="apr">Апрель (Сев)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Результаты расчета ущерба -->
+          <div class="calc-results-section">
+            <h4 style="font-size: 1.05rem; margin-bottom: 0.25rem;">Оценка финансового риска и предотвращенного ущерба</h4>
+
+            <div class="calc-score-box">
+              <div>
+                <span style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase;">Индекс засухи полигона (Si):</span>
+                <div class="score-main" id="econ-current-si">+1.20</div>
+              </div>
+              <div style="text-align: right;">
+                <span style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase;" data-i18n="cropPotentialLossLabel">Потери урожая:</span>
+                <div style="font-size: 2rem; font-weight: 800; font-family: monospace;" id="econ-loss-percent">15.6%</div>
+              </div>
+            </div>
+
+            <div class="calc-steps-grid">
+              <div class="calc-step-card">
+                <span class="calc-step-title" data-i18n="cropLossTonsLabel">Физический недобор зерна:</span>
+                <div class="calc-step-val" id="econ-loss-tons" style="color: #ef4444;">280.8 тонн</div>
+              </div>
+              <div class="calc-step-card">
+                <span class="calc-step-title" data-i18n="cropDirectDamageLabel">Прямой финансовый убыток:</span>
+                <div class="calc-step-val" id="econ-damage-kzt" style="color: #ef4444;">23 868 000 ₸</div>
+              </div>
+              <div class="calc-step-card" style="grid-column: 1 / -1; background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.3);">
+                <span class="calc-step-title" style="color: var(--accent-emerald);" data-i18n="cropSavedProfitLabel">Предотвращенный ущерб от влагосбережения:</span>
+                <div class="calc-step-val" id="econ-saved-kzt" style="color: #10b981; font-size: 1.25rem;">+14 798 160 ₸</div>
+                <span style="font-size: 0.7rem; color: var(--text-muted);">При внедрении системы чистых паров и лущения стерни</span>
+              </div>
+            </div>
+
+            <div class="calc-verdict-box" id="econ-advice-box">
+              <strong>Агрономическое заключение:</strong> Оценка...
             </div>
           </div>
         </div>
@@ -681,10 +813,14 @@
 
   <!-- Модули портала -->
   <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/map2d.js"></script>
   <script src="js/map3d.js"></script>
   <script src="js/charts.js"></script>
   <script src="js/calculator.js"></script>
+  <script src="js/transect.js"></script>
+  <script src="js/economic.js"></script>
+  <script src="js/report.js"></script>
   <script src="js/app.js"></script>
 
 </body>

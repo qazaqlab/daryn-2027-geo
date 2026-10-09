@@ -31,6 +31,9 @@ class ScienceApp {
     this.map3d = new DroughtMap3D('map3d-container');
     this.charts = new ScientificCharts();
     this.calculator = new PedCalculator();
+    this.transect = new ElevationTransect('chart-transect');
+    this.economic = new EconomicCalculator();
+    this.report = new ScientificReport();
 
     // 3. Рендер компонентов страницы
     this.renderStationSelectorCards();
@@ -40,6 +43,7 @@ class ScienceApp {
 
     // 4. Настройка слушателей событий
     this.setupEventListeners();
+    this.setupLanguageSwitcher();
 
     // 5. Первоначальное обновление данных индикаторов
     this.updateGlobalTime(this.currentYear, this.currentMonthKey);
@@ -246,6 +250,33 @@ class ScienceApp {
 
     // 4. Обновляем карточки станций
     this.updateStationCardsValues();
+
+    // 5. Обновляем высотный трансект
+    if (this.transect) {
+      this.transect.updateTime(year, monthKey);
+    }
+
+    // 6. Обновляем агро-экономический расчет
+    if (this.economic) {
+      this.economic.calculate();
+    }
+  }
+
+  setupLanguageSwitcher() {
+    const savedLang = localStorage.getItem('drought_portal_lang') || 'ru';
+    if (window.I18N) {
+      I18N.setLang(savedLang);
+    }
+
+    const langBtns = document.querySelectorAll('.lang-btn');
+    langBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lang = btn.dataset.lang;
+        if (window.I18N) {
+          I18N.setLang(lang);
+        }
+      });
+    });
   }
 
   togglePlayTimeline() {
