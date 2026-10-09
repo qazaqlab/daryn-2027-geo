@@ -106,8 +106,10 @@ class DroughtMap2D {
     const bounds = this.map.getBounds();
     const topLeft = this.map.latLngToLayerPoint(bounds.getNorthWest());
 
-    this.canvas.width = size.x;
-    this.canvas.height = size.y;
+    if (this.canvas.width !== size.x || this.canvas.height !== size.y) {
+      this.canvas.width = size.x;
+      this.canvas.height = size.y;
+    }
     L.DomUtil.setPosition(this.canvas, topLeft);
 
     const ctx = this.canvas.getContext('2d');

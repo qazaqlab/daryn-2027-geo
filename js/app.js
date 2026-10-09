@@ -15,7 +15,7 @@ class ScienceApp {
     this.currentMonthKey = 'jul';
     this.isPlaying = false;
     this.playInterval = null;
-    this.playSpeed = 1200; // мс на шаг
+    this.playSpeed = 350; // мс на шаг (высокая скорость анимации)
     this.activeMapMode = '2d'; // '2d' или '3d'
     this.activeTheme = 'dark';
 
@@ -116,6 +116,17 @@ class ScienceApp {
     if (playBtn) {
       playBtn.addEventListener('click', () => this.togglePlayTimeline());
     }
+
+    // Переключение скорости воспроизведения (1x, 2x, 4x)
+    const speedButtons = document.querySelectorAll('.timeline-speed-btn');
+    speedButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        speedButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const speed = parseInt(btn.dataset.speed);
+        this.setPlaySpeed(speed);
+      });
+    });
 
     // Пресеты видов карты
     const presetButtons = document.querySelectorAll('.map-preset-btn');
@@ -259,6 +270,21 @@ class ScienceApp {
         clearInterval(this.playInterval);
         this.playInterval = null;
       }
+    }
+  }
+
+  setPlaySpeed(speedMs) {
+    this.playSpeed = speedMs;
+    if (this.isPlaying && this.playInterval) {
+      clearInterval(this.playInterval);
+      const years = SCIENTIFIC_DATA.meta.years;
+      this.playInterval = setInterval(() => {
+        let nextYearIdx = years.indexOf(this.currentYear) + 1;
+        if (nextYearIdx >= years.length) {
+          nextYearIdx = 0;
+        }
+        this.updateGlobalTime(years[nextYearIdx], this.currentMonthKey);
+      }, this.playSpeed);
     }
   }
 

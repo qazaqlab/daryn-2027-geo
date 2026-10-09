@@ -598,6 +598,25 @@ body.light-theme .custom-range-slider {
   border-color: var(--accent-blue);
 }
 
+.timeline-speed-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.3rem 0.55rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-family: monospace;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.timeline-speed-btn:hover, .timeline-speed-btn.active {
+  background: var(--accent-blue);
+  color: #0b1120;
+  border-color: var(--accent-blue);
+}
+
 /* Легенда засушливости */
 .map-legend-dock {
   position: absolute;
