@@ -1,6 +1,7 @@
 /**
  * МОДУЛЬ ГЕНЕРАЦИИ ОФИЦИАЛЬНОГО НАУЧНОГО ОТЧЕТА (PDF / ПЕЧАТЬ)
  * Формирует строгий печатный документ (Научный паспорт исследования) для жюри конкурса «Дарын»
+ * Включает: сводные KPI, таблицы метеостанций, графики динамики и диаграммы в высоком разрешении.
  */
 
 class ScientificReport {
@@ -18,6 +19,7 @@ class ScientificReport {
   generateAndPrint() {
     const yr = (window.app && window.app.currentYear) ? window.app.currentYear : 2020;
     const mKey = (window.app && window.app.currentMonthKey) ? window.app.currentMonthKey : 'jul';
+    const lang = (window.I18N && window.I18N.currentLang) ? window.I18N.currentLang : 'ru';
     const monthName = SCIENTIFIC_DATA.meta.months[SCIENTIFIC_DATA.meta.monthKeys.indexOf(mKey)];
 
     let reportModal = document.getElementById('scientific-report-modal');
@@ -58,11 +60,40 @@ class ScientificReport {
     avgSi = count > 0 ? (avgSi / count).toFixed(2) : '—';
     const regClassif = PedHelper.getClassification(parseFloat(avgSi));
 
+    // Извлечение графиков из страницы в виде картинок Base64 для надежного экспорта в PDF
+    let timeseriesImg = '';
+    const tsCanvas = document.getElementById('chart-timeseries');
+    if (tsCanvas) {
+      try { timeseriesImg = tsCanvas.toDataURL('image/png'); } catch (e) {}
+    }
+
+    let transectImg = '';
+    const transectCanvas = document.getElementById('chart-transect');
+    if (transectCanvas) {
+      try { transectImg = transectCanvas.toDataURL('image/png'); } catch (e) {}
+    }
+
+    let radarImg = '';
+    const radarCanvas = document.getElementById('chart-radar');
+    if (radarCanvas) {
+      try { radarImg = radarCanvas.toDataURL('image/png'); } catch (e) {}
+    }
+
+    let casesImg = '';
+    const casesCanvas = document.getElementById('chart-cases');
+    if (casesCanvas) {
+      try { casesImg = casesCanvas.toDataURL('image/png'); } catch (e) {}
+    }
+
     const html = `
       <div class="report-paper">
         <div class="report-print-controls no-print">
-          <button class="icon-btn" onclick="window.print()">Распечатать / Сохранить в PDF</button>
-          <button class="icon-btn" onclick="document.getElementById('scientific-report-modal').style.display='none'">Закрыть</button>
+          <button class="icon-btn highlight-btn" onclick="window.print()">
+            Распечатать / Экспорт в PDF (Ctrl + P)
+          </button>
+          <button class="icon-btn" onclick="document.getElementById('scientific-report-modal').style.display='none'">
+            Закрыть предпросмотр
+          </button>
         </div>
 
         <div class="report-header-academic">
@@ -115,7 +146,38 @@ class ScientificReport {
           </tbody>
         </table>
 
-        <div class="report-section-title">3. НАУЧНО ОБОСНОВАННЫЙ КОМПЛЕКС ВЛАГОСБЕРЕЖЕНИЯ</div>
+        <div class="report-section-title">3. ГРАФИЧЕСКИЙ МАТЕМАТИЧЕСКИЙ АНАЛИЗ И ДИАГРАММЫ</div>
+        <div class="report-charts-grid">
+          ${timeseriesImg ? `
+            <div class="rep-chart-card">
+              <div class="rep-chart-title">Многолетняя динамика параметра атмосферной засухи Si (2010–2025 гг.)</div>
+              <img src="${timeseriesImg}" class="rep-chart-img" alt="Динамика Si">
+            </div>
+          ` : ''}
+
+          ${transectImg ? `
+            <div class="rep-chart-card">
+              <div class="rep-chart-title">Орографический трансект высотного профиля (Матай — Алматы — Кеген)</div>
+              <img src="${transectImg}" class="rep-chart-img" alt="Высотный профиль">
+            </div>
+          ` : ''}
+
+          ${radarImg ? `
+            <div class="rep-chart-card">
+              <div class="rep-chart-title">Радарная диаграмма экстремальных засух S_max (Таблица 4)</div>
+              <img src="${radarImg}" class="rep-chart-img" alt="Радар S_max">
+            </div>
+          ` : ''}
+
+          ${casesImg ? `
+            <div class="rep-chart-card">
+              <div class="rep-chart-title">Число случаев атмосферных засух различной интенсивности (Таблица 5)</div>
+              <img src="${casesImg}" class="rep-chart-img" alt="Число случаев засух">
+            </div>
+          ` : ''}
+        </div>
+
+        <div class="report-section-title">4. НАУЧНО ОБОСНОВАННЫЙ КОМПЛЕКС ВЛАГОСБЕРЕЖЕНИЯ</div>
         <ul class="report-recommendations-list">
           <li><strong>Чистые пары:</strong> обеспечивают накопление влаги на 80–85 мм больше по сравнению с непаровыми предшественниками.</li>
           <li><strong>Раннее лущение стерни:</strong> сохраняет запасы продуктивной влаги на 20–25 мм сразу после уборочных работ.</li>

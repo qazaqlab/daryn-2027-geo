@@ -45,6 +45,13 @@ class ScienceApp {
     this.setupEventListeners();
     this.setupLanguageSwitcher();
 
+    // Слушатель смены языка для динамических блоков
+    window.addEventListener('langChanged', () => {
+      this.renderStationSelectorCards();
+      this.updateRegionalStatusBanner();
+      this.renderDatabaseTables();
+    });
+
     // 5. Первоначальное обновление данных индикаторов
     this.updateGlobalTime(this.currentYear, this.currentMonthKey);
   }
@@ -176,12 +183,8 @@ class ScienceApp {
   }
 
   switchSection(sectionId) {
-    const sections = document.querySelectorAll('.portal-section');
-    sections.forEach(sec => sec.classList.remove('active'));
-
     const targetSec = document.getElementById(sectionId);
     if (targetSec) {
-      targetSec.classList.add('active');
       targetSec.scrollIntoView({ behavior: 'smooth' });
     }
 

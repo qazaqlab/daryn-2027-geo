@@ -12,33 +12,31 @@
 </head>
 <body class="dark-theme">
 
-  <!-- ШАПКА ПОРТАЛА -->
+  <!-- ШАПКА ПОРТАЛА (МИНИМАЛИСТИЧНЫЙ ДИЗАЙН) -->
   <header class="site-header">
     <div class="brand-wrapper">
       <div class="brand-emblem">KZ</div>
       <div class="brand-titles">
-        <h1 data-i18n="siteTitle">Мониторинг атмосферных засух Юго-Восточного Казахстана</h1>
+        <h1 data-i18n="siteTitle">Мониторинг атмосферных засух ЮВ Казахстана</h1>
         <div class="brand-subtitle">
           <span data-i18n="siteSubtitle">Геоинформационная аналитическая система</span>
-          <span class="badge-tag" data-i18n="contestBadge">Конкурс «Дарын»</span>
           <span class="badge-tag">2010–2025 гг.</span>
         </div>
       </div>
     </div>
 
-    <!-- Навигация -->
+    <!-- Основная лаконичная навигация -->
     <nav class="main-nav">
-      <a href="#section-map" class="nav-link active" data-i18n="navMap">Геокарта (2D / 3D)</a>
+      <a href="#section-map" class="nav-link active" data-i18n="navMap">Геокарта</a>
       <a href="#section-transect" class="nav-link" data-i18n="navTransect">Высотный профиль</a>
-      <a href="#section-analytics" class="nav-link" data-i18n="navAnalytics">Аналитика и ряды</a>
+      <a href="#section-analytics" class="nav-link" data-i18n="navAnalytics">Аналитика</a>
       <a href="#section-calculator" class="nav-link" data-i18n="navCalculator">Модель Педя</a>
       <a href="#section-economic" class="nav-link" data-i18n="navEconomic">Агро-экономика</a>
       <a href="#section-agro" class="nav-link" data-i18n="navAgro">Влагосбережение</a>
       <a href="#section-database" class="nav-link" data-i18n="navDatabase">Архив данных</a>
-      <a href="#section-about" class="nav-link" data-i18n="navAbout">Методология</a>
     </nav>
 
-    <!-- Действия -->
+    <!-- Компактные действия: Языки + PDF-паспорт + Тема -->
     <div class="header-actions">
       <!-- Переключатель языка -->
       <div class="lang-switch-group">
@@ -47,17 +45,12 @@
         <button class="lang-btn" data-lang="en">EN</button>
       </div>
 
-      <button class="icon-btn" id="btn-print-report" title="Печать научного паспорта (PDF)">
-        <span data-i18n="btnPrintReport">Печать отчета (PDF)</span>
+      <button class="icon-btn highlight-btn" id="btn-print-report" title="Сформировать паспорт и сохранить в PDF">
+        <span data-i18n="btnPrintReport">PDF Паспорт</span>
       </button>
-      <button class="icon-btn" id="export-csv-btn" title="Экспорт массива данных в формате CSV">
-        <span>CSV</span>
-      </button>
-      <button class="icon-btn" id="export-json-btn" title="Экспорт структуры данных в формате JSON">
-        <span>JSON</span>
-      </button>
-      <button class="icon-btn" id="theme-toggle-btn" title="Сменить цветовую тему">
-        <span id="theme-icon">Светлая тема</span>
+
+      <button class="icon-btn" id="theme-toggle-btn" title="Сменить тему">
+        <span id="theme-icon">Тема</span>
       </button>
     </div>
   </header>
@@ -69,19 +62,19 @@
     <section class="hero-scientific-banner">
       <div class="hero-content">
         <div class="hero-text">
-          <h2>Особенности формирования атмосферных засух на территории юго-восточного Казахстана</h2>
+          <h2 data-i18n="heroTitle">Особенности формирования атмосферных засух на территории юго-восточного Казахстана</h2>
           <div class="hero-meta-author">
             <div class="hero-meta-item">
-              <span><strong>Автор исследования:</strong> ученик 11 «Г» класса Нұрғазы Әмір</span>
+              <span><strong data-i18n="authorLabel">Автор исследования:</strong> <span data-i18n="authorVal">ученик 11 «Г» класса Нұрғазы Әмір</span></span>
             </div>
             <div class="hero-meta-item">
-              <span><strong>Научная программа:</strong> Республиканский конкурс «Дарын»</span>
+              <span><strong data-i18n="programLabel">Научная программа:</strong> <span data-i18n="programVal">Республиканский конкурс «Дарын»</span></span>
             </div>
             <div class="hero-meta-item">
-              <span><strong>Наблюдательная сеть:</strong> 5 опорных метеостанций (Талдыкорган, Жаланашколь, Матай, Алматы, Кеген)</span>
+              <span><strong data-i18n="networkLabel">Наблюдательная сеть:</strong> <span data-i18n="networkVal">5 опорных метеостанций (Талдыкорган, Жаланашколь, Матай, Алматы, Кеген)</span></span>
             </div>
             <div class="hero-meta-item">
-              <span><strong>Математический аппарат:</strong> Индекс атмосферной засухи А.А. Педя (Si)</span>
+              <span><strong data-i18n="methodLabel">Математический аппарат:</strong> <span data-i18n="methodVal">Индекс атмосферной засухи А.А. Педя (Si)</span></span>
             </div>
           </div>
         </div>
@@ -89,12 +82,12 @@
         <!-- Текущее состояние региона -->
         <div class="regional-status-pill">
           <div class="status-left">
-            <span class="status-label">Региональный индекс Si:</span>
+            <span class="status-label" data-i18n="regSiLabel">Региональный индекс Si:</span>
             <span class="status-val" id="region-status-val">+0.48</span>
           </div>
           <div class="status-right">
             <span class="status-badge-chip" id="region-status-badge">Слабая засуха</span>
-            <span class="status-desc-text" id="region-status-desc">Средневзвешенное значение по опорным пунктам</span>
+            <span class="status-desc-text" id="region-status-desc" data-i18n="regStatusDesc">Средневзвешенное значение по опорным пунктам</span>
             <span style="font-size: 0.7rem; color: var(--text-muted); font-family: monospace;" id="region-status-month">Июль 2020 г.</span>
           </div>
         </div>
@@ -105,47 +98,47 @@
     <div class="kpi-grid">
       <div class="kpi-card">
         <div class="kpi-header">
-          <span class="kpi-title">Опорная сеть</span>
+          <span class="kpi-title" data-i18n="kpiStations">Опорная сеть</span>
           <span style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">[ST-05]</span>
         </div>
-        <div class="kpi-number" style="color: var(--accent-blue);">5 станций</div>
-        <div class="kpi-footnote">Высотный градиент от 372 м до 1802 м над у.м.</div>
+        <div class="kpi-number" style="color: var(--accent-blue);" data-i18n="kpiStationsVal">5 станций</div>
+        <div class="kpi-footnote" data-i18n="kpiStationsSub">Высотный градиент от 372 м до 1802 м над у.м.</div>
       </div>
 
       <div class="kpi-card">
         <div class="kpi-header">
-          <span class="kpi-title">Временной охват</span>
+          <span class="kpi-title" data-i18n="kpiPeriod">Временной охват</span>
           <span style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">[T-16Y]</span>
         </div>
-        <div class="kpi-number" style="color: var(--accent-emerald);">16 лет</div>
-        <div class="kpi-footnote">2010–2025 гг. (теплое полугодие: апр – авг)</div>
+        <div class="kpi-number" style="color: var(--accent-emerald);" data-i18n="kpiPeriodVal">16 лет</div>
+        <div class="kpi-footnote" data-i18n="kpiPeriodSub">2010–2025 гг. (теплое полугодие: апр – авг)</div>
       </div>
 
       <div class="kpi-card">
         <div class="kpi-header">
-          <span class="kpi-title">Пиковый экстремум (S_max)</span>
+          <span class="kpi-title" data-i18n="kpiPeak">Пиковый экстремум (S_max)</span>
           <span style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">[MAX]</span>
         </div>
         <div class="kpi-number" style="color: var(--accent-red);">+2.3</div>
-        <div class="kpi-footnote">Зафиксирован на станциях Матай и Кеген</div>
+        <div class="kpi-footnote" data-i18n="kpiPeakSub">Зафиксирован на станциях Матай и Кеген</div>
       </div>
 
       <div class="kpi-card">
         <div class="kpi-header">
-          <span class="kpi-title">Опасные засухи (Si > 1)</span>
+          <span class="kpi-title" data-i18n="kpiDangerous">Опасные засухи (Si > 1)</span>
           <span style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">[WARN]</span>
         </div>
-        <div class="kpi-number" style="color: var(--accent-orange);">8 случаев</div>
-        <div class="kpi-footnote">Критический порог ущерба продуктивности посевов</div>
+        <div class="kpi-number" style="color: var(--accent-orange);" data-i18n="kpiDangerousVal">8 случаев</div>
+        <div class="kpi-footnote" data-i18n="kpiDangerousSub">Критический порог ущерба продуктивности посевов</div>
       </div>
 
       <div class="kpi-card">
         <div class="kpi-header">
-          <span class="kpi-title">Резерв влагонакопления</span>
+          <span class="kpi-title" data-i18n="kpiWater">Резерв влагонакопления</span>
           <span style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">[H2O]</span>
         </div>
-        <div class="kpi-number" style="color: var(--accent-cyan);">+85 мм</div>
-        <div class="kpi-footnote">Эффект сбережения влаги чистыми парами</div>
+        <div class="kpi-number" style="color: var(--accent-cyan);" data-i18n="kpiWaterVal">+85 мм</div>
+        <div class="kpi-footnote" data-i18n="kpiWaterSub">Эффект сбережения влаги чистыми парами</div>
       </div>
     </div>
 
@@ -157,22 +150,22 @@
           <!-- Переключатель 2D / 3D -->
           <div class="map-mode-toggle">
             <button class="mode-btn active" id="btn-mode-2d">
-              <span>2D ГИС-карта (Интерполяция / Спутник)</span>
+              <span data-i18n="mode2D">2D ГИС-карта (Интерполяция / Спутник)</span>
             </button>
             <button class="mode-btn" id="btn-mode-3d">
-              <span>3D Цифровая модель рельефа (DEM)</span>
+              <span data-i18n="mode3D">3D Цифровая модель рельефа (DEM)</span>
             </button>
           </div>
 
           <!-- Ракурсы -->
           <div class="map-presets">
-            <span style="font-size:0.75rem; color:var(--text-secondary); align-self:center;">Фокус:</span>
-            <button class="map-preset-btn active" data-preset="all">Все станции</button>
-            <button class="map-preset-btn" data-preset="almaty">Алматы (Заилийский Алатау)</button>
-            <button class="map-preset-btn" data-preset="kegen">Кеген (Плато 1802м)</button>
-            <button class="map-preset-btn" data-preset="zhalanashkol">Жаланашколь (Джунгарские ворота)</button>
-            <button class="map-preset-btn" data-preset="matay">Матай (Прибалхашье)</button>
-            <button class="map-preset-btn" data-preset="taldykorgan">Талдыкорган (Каратал)</button>
+            <span style="font-size:0.75rem; color:var(--text-secondary); align-self:center;" data-i18n="focusLabel">Фокус:</span>
+            <button class="map-preset-btn active" data-preset="all" data-i18n="focusAll">Все станции</button>
+            <button class="map-preset-btn" data-preset="almaty" data-i18n="focusAlmaty">Алматы (Заилийский Алатау)</button>
+            <button class="map-preset-btn" data-preset="kegen" data-i18n="focusKegen">Кеген (Плато 1802м)</button>
+            <button class="map-preset-btn" data-preset="zhalanashkol" data-i18n="focusZhalanashkol">Жаланашколь (Джунгарские ворота)</button>
+            <button class="map-preset-btn" data-preset="matay" data-i18n="focusMatay">Матай (Прибалхашье)</button>
+            <button class="map-preset-btn" data-preset="taldykorgan" data-i18n="focusTaldykorgan">Талдыкорган (Каратал)</button>
           </div>
         </div>
 
@@ -187,28 +180,28 @@
           <div id="map3d-view" style="display: none;">
             <div id="map3d-container"></div>
             <div class="map-3d-hint">
-              <span>Управление 3D камерой: ЛКМ — вращение, ПКМ — смещение, колесо мыши — масштаб</span>
+              <span data-i18n="hint3D">Управление 3D камерой: ЛКМ — вращение, ПКМ — смещение, колесо мыши — масштаб</span>
             </div>
           </div>
 
           <!-- Легенда шкалы Педя -->
           <div class="map-legend-dock">
-            <div class="legend-title">Градация засух (индекс Si)</div>
+            <div class="legend-title" data-i18n="legendTitle">Градация засух (индекс Si)</div>
             <div class="legend-item">
               <span class="legend-color-box" style="background: var(--si-wet);"></span>
-              <span>Si &le; 0: Избыточное увлажнение / норма</span>
+              <span data-i18n="legendWet">Si &le; 0: Избыточное увлажнение / норма</span>
             </div>
             <div class="legend-item">
               <span class="legend-color-box" style="background: var(--si-weak);"></span>
-              <span>0 &lt; Si &lt; 1: Слабая засуха</span>
+              <span data-i18n="legendWeak">0 &lt; Si &lt; 1: Слабая засуха</span>
             </div>
             <div class="legend-item">
               <span class="legend-color-box" style="background: var(--si-danger);"></span>
-              <span>1 &le; Si &lt; 2: Опасная атмосферная засуха</span>
+              <span data-i18n="legendDanger">1 &le; Si &lt; 2: Опасная атмосферная засуха</span>
             </div>
             <div class="legend-item">
               <span class="legend-color-box" style="background: var(--si-extreme);"></span>
-              <span>Si &ge; 2: Сильная экстремальная засуха</span>
+              <span data-i18n="legendExtreme">Si &ge; 2: Сильная экстремальная засуха</span>
             </div>
           </div>
 
@@ -217,14 +210,14 @@
             <!-- Воспроизведение -->
             <div class="timeline-play-control">
               <button class="btn-play-timeline" id="timeline-play-btn">
-                <span>Воспроизведение</span>
+                <span data-i18n="playBtn">Воспроизведение</span>
               </button>
             </div>
 
             <!-- Слайдер года -->
             <div class="timeline-slider-wrapper">
               <div class="slider-labels-row">
-                <span class="slider-title">Год наблюдений:</span>
+                <span class="slider-title" data-i18n="yearLabel">Год наблюдений:</span>
                 <span class="slider-val-highlight" id="timeline-year-val">2020</span>
               </div>
               <input type="range" id="timeline-year-slider" class="custom-range-slider" min="2010" max="2025" step="1" value="2020">
@@ -241,7 +234,7 @@
 
             <!-- Скорость -->
             <div class="timeline-speed-group" style="display: flex; gap: 4px; align-items: center;">
-              <span style="font-size: 0.7rem; color: var(--text-muted); font-family: monospace;">Скорость:</span>
+              <span style="font-size: 0.7rem; color: var(--text-muted); font-family: monospace;" data-i18n="speedLabel">Скорость:</span>
               <button class="timeline-speed-btn" data-speed="600">1x</button>
               <button class="timeline-speed-btn active" data-speed="300">2x</button>
               <button class="timeline-speed-btn" data-speed="120">4x</button>

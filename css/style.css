@@ -193,17 +193,9 @@ body.light-theme .nav-link:hover, body.light-theme .nav-link.active {
 }
 
 .portal-section {
-  display: none;
-  animation: fadeIn 0.3s ease;
-}
-
-.portal-section.active {
   display: block;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+  margin-bottom: 3.5rem;
+  scroll-margin-top: 5rem;
 }
 
 /* ==========================================================================
@@ -1643,6 +1635,37 @@ body.light-theme .map-legend-dock {
 .sign-line {
   font-weight: 700;
   font-family: monospace;
+}
+
+.report-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.75rem;
+}
+
+.rep-chart-card {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.75rem;
+  background: #ffffff;
+  page-break-inside: avoid;
+}
+
+.rep-chart-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 0.25rem;
+}
+
+.rep-chart-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
 }
 
 /* @media print стили для чистого PDF */
