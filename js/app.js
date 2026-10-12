@@ -81,7 +81,16 @@ class ScienceApp {
     }
   }
 
-  setupEventListeners() {
+    // Мобильное меню (гамбургер)
+    const mobileMenuBtn = document.getElementById('mobile-menu-toggle');
+    const mainNav = document.querySelector('.main-nav');
+    if (mobileMenuBtn && mainNav) {
+      mobileMenuBtn.addEventListener('click', () => {
+        mainNav.classList.toggle('mobile-open');
+        mobileMenuBtn.classList.toggle('active');
+      });
+    }
+
     // Переключение вкладок навигации
     const navLinks = document.querySelectorAll('.nav-link');
     navLinks.forEach(link => {
@@ -89,6 +98,11 @@ class ScienceApp {
         e.preventDefault();
         const targetId = link.getAttribute('href').substring(1);
         this.switchSection(targetId);
+        // Закрываем меню на мобильных после перехода
+        if (mainNav && mainNav.classList.contains('mobile-open')) {
+          mainNav.classList.remove('mobile-open');
+          if (mobileMenuBtn) mobileMenuBtn.classList.remove('active');
+        }
       });
     });
 
