@@ -81,6 +81,7 @@ class ScienceApp {
     }
   }
 
+  setupEventListeners() {
     // Мобильное меню (гамбургер)
     const mobileMenuBtn = document.getElementById('mobile-menu-toggle');
     const mainNav = document.querySelector('.main-nav');
